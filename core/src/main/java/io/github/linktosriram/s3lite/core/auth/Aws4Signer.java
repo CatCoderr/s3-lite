@@ -1,7 +1,7 @@
 package io.github.linktosriram.s3lite.core.auth;
 
 import io.github.linktosriram.s3lite.api.auth.AwsCredentials;
-import io.github.linktosriram.s3lite.api.region.Region;
+import io.github.linktosriram.s3lite.api.region.RegionProvider;
 import io.github.linktosriram.s3lite.http.spi.request.ImmutableRequest;
 import io.github.linktosriram.s3lite.http.spi.request.RequestBody;
 import io.github.linktosriram.s3lite.util.StringUtils;
@@ -12,36 +12,22 @@ import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.AUTHORIZATION;
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.AWS4_SIGNING_ALGORITHM;
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.AWS4_TERMINATOR;
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.HOST;
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.LINE_SEPARATOR;
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.X_AMZ_CONTENT_SHA256;
-import static io.github.linktosriram.s3lite.core.auth.SignerConstants.X_AMZ_DATE;
+import static io.github.linktosriram.s3lite.core.auth.SignerConstants.*;
 import static io.github.linktosriram.s3lite.http.spi.SdkHttpUtils.toQueryString;
 import static io.github.linktosriram.s3lite.http.spi.SdkHttpUtils.urlEncodeIgnoreSlashes;
-import static io.github.linktosriram.s3lite.util.DigestUtils.encodeHexString;
-import static io.github.linktosriram.s3lite.util.DigestUtils.hmacSha256;
-import static io.github.linktosriram.s3lite.util.DigestUtils.sha256Hex;
+import static io.github.linktosriram.s3lite.util.DigestUtils.*;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Comparator.comparing;
 import static java.util.Locale.ENGLISH;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 /**
  * Signer implementation that signs requests with the AWS4 signing protocol.
@@ -57,7 +43,7 @@ final class Aws4Signer implements RegionAwareSigner {
     private static final DateTimeFormatter DATE_ONLY = DateTimeFormatter.ofPattern("yyyyMMdd").withZone(UTC);
     private static final DateTimeFormatter ISO_8601 = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(UTC);
 
-    private Region region;
+    private RegionProvider region;
 
     static Aws4Signer create() {
         return new Aws4Signer();
@@ -87,12 +73,12 @@ final class Aws4Signer implements RegionAwareSigner {
     }
 
     @Override
-    public Region getRegion() {
+    public RegionProvider getRegion() {
         return region;
     }
 
     @Override
-    public void setRegion(final Region region) {
+    public void setRegion(final RegionProvider region) {
         this.region = region;
     }
 

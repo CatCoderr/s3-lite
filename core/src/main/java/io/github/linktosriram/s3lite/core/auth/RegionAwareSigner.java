@@ -1,6 +1,6 @@
 package io.github.linktosriram.s3lite.core.auth;
 
-import io.github.linktosriram.s3lite.api.region.Region;
+import io.github.linktosriram.s3lite.api.region.RegionProvider;
 
 public interface RegionAwareSigner extends Signer {
 
@@ -8,7 +8,7 @@ public interface RegionAwareSigner extends Signer {
         return Aws4Signer.create();
     }
 
-    Region getRegion();
+    RegionProvider getRegion();
 
-    void setRegion(Region region);
+    void setRegion(RegionProvider region);
 }

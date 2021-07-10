@@ -2,6 +2,7 @@ package io.github.linktosriram.s3lite.api.client;
 
 import io.github.linktosriram.s3lite.api.auth.AwsCredentialsProvider;
 import io.github.linktosriram.s3lite.api.region.Region;
+import io.github.linktosriram.s3lite.api.region.RegionProvider;
 import io.github.linktosriram.s3lite.http.spi.SdkHttpClient;
 
 /**
@@ -11,7 +12,7 @@ public interface S3ClientBuilder {
 
     S3ClientBuilder credentialsProvider(AwsCredentialsProvider provider);
 
-    S3ClientBuilder region(Region region);
+    S3ClientBuilder region(RegionProvider region);
 
     S3ClientBuilder httpClient(SdkHttpClient httpClient);
 

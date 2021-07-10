@@ -4,12 +4,13 @@ import io.github.linktosriram.s3lite.api.auth.AwsCredentialsProvider;
 import io.github.linktosriram.s3lite.api.client.S3Client;
 import io.github.linktosriram.s3lite.api.client.S3ClientBuilder;
 import io.github.linktosriram.s3lite.api.region.Region;
+import io.github.linktosriram.s3lite.api.region.RegionProvider;
 import io.github.linktosriram.s3lite.http.spi.SdkHttpClient;
 
 public class DefaultS3ClientBuilder implements S3ClientBuilder {
 
     private AwsCredentialsProvider provider;
-    private Region region;
+    private RegionProvider region;
     private SdkHttpClient httpClient;
 
     @Override
@@ -19,7 +20,7 @@ public class DefaultS3ClientBuilder implements S3ClientBuilder {
     }
 
     @Override
-    public S3ClientBuilder region(final Region region) {
+    public S3ClientBuilder region(final RegionProvider region) {
         this.region = region;
         return this;
     }

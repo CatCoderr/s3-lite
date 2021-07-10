@@ -8,7 +8,7 @@ import static java.net.URI.create;
 /**
  * Reference: https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
  */
-public enum Region {
+public enum Region implements RegionProvider {
 
     US_EAST_1("us-east-1", create("https://s3.us-east-1.amazonaws.com")),
     US_EAST_2("us-east-2", create("https://s3.us-east-2.amazonaws.com")),

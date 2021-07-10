@@ -6,25 +6,17 @@ import io.github.linktosriram.s3lite.api.exception.ErrorResponse;
 import io.github.linktosriram.s3lite.api.exception.NoSuchBucketException;
 import io.github.linktosriram.s3lite.api.exception.NoSuchKeyException;
 import io.github.linktosriram.s3lite.api.exception.S3Exception;
-import io.github.linktosriram.s3lite.api.region.Region;
+import io.github.linktosriram.s3lite.api.region.RegionProvider;
 import io.github.linktosriram.s3lite.api.request.DeleteObjectRequest;
 import io.github.linktosriram.s3lite.api.request.GetObjectRequest;
 import io.github.linktosriram.s3lite.api.request.ListObjectsV2Request;
 import io.github.linktosriram.s3lite.api.request.PutObjectRequest;
-import io.github.linktosriram.s3lite.api.response.DeleteObjectResponse;
-import io.github.linktosriram.s3lite.api.response.GetObjectResponse;
-import io.github.linktosriram.s3lite.api.response.ListObjectsV2Response;
-import io.github.linktosriram.s3lite.api.response.PutObjectResponse;
-import io.github.linktosriram.s3lite.api.response.ResponseTransformer;
+import io.github.linktosriram.s3lite.api.response.*;
 import io.github.linktosriram.s3lite.core.auth.DefaultSignableRequest;
 import io.github.linktosriram.s3lite.core.auth.RegionAwareSigner;
 import io.github.linktosriram.s3lite.core.auth.SignableRequest;
 import io.github.linktosriram.s3lite.core.mapper.ListObjectsV2ResponseMapper;
-import io.github.linktosriram.s3lite.core.marshal.DeleteObjectRequestMarshaller;
-import io.github.linktosriram.s3lite.core.marshal.GetObjectRequestMarshaller;
-import io.github.linktosriram.s3lite.core.marshal.ListObjectsV2RequestMarshaller;
-import io.github.linktosriram.s3lite.core.marshal.PutObjectRequestMarshaller;
-import io.github.linktosriram.s3lite.core.marshal.SdkRequestMarshaller;
+import io.github.linktosriram.s3lite.core.marshal.*;
 import io.github.linktosriram.s3lite.core.unmarshal.DeleteObjectResponseUnmarshaller;
 import io.github.linktosriram.s3lite.core.unmarshal.GetObjectResponseUnmarshaller;
 import io.github.linktosriram.s3lite.core.unmarshal.PutObjectResponseUnmarshaller;
@@ -44,9 +36,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.linktosriram.s3lite.http.spi.HttpMethod.DELETE;
-import static io.github.linktosriram.s3lite.http.spi.HttpMethod.GET;
-import static io.github.linktosriram.s3lite.http.spi.HttpMethod.PUT;
+import static io.github.linktosriram.s3lite.http.spi.HttpMethod.*;
 import static java.lang.String.format;
 import static java.net.URI.create;
 
@@ -59,7 +49,7 @@ final class DefaultS3Client implements S3Client {
     private final SdkHttpClient httpClient;
     private final String s3Host;
 
-    DefaultS3Client(final AwsCredentials credentials, final Region region, final SdkHttpClient httpClient) {
+    DefaultS3Client(final AwsCredentials credentials, final RegionProvider region, final SdkHttpClient httpClient) {
         this.credentials = credentials;
         this.httpClient = httpClient;
         s3Host = region.getEndpoint().getHost();
